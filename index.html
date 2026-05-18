@@ -430,14 +430,12 @@ tr:hover td { background: #f5f8ff; }
 pdfjsLib.GlobalWorkerOptions.workerSrc =
   'https://unpkg.com/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 
-// Wait for libraries to load before initializing
+// Show login screen on load
 window.addEventListener('load', function() {
-  if (typeof pdfjsLib === 'undefined') {
-    console.error('PDF.js not loaded');
-  }
-  if (typeof supabase === 'undefined') {
-    console.error('Supabase not loaded');
-  }
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('main-header').style.display  = 'none';
+  document.getElementById('home-zone').style.display    = 'none';
+  document.getElementById('dash-zone').style.display    = 'none';
 });
 
 // ══════════════════════════════════════════
@@ -510,7 +508,13 @@ function pinEnter() {
 }
 function doLogout() {
   if (!confirm('¿Cerrar sesión?')) return;
-  USER=null; CARTERAS={}; PROMESAS={}; CURRENT=null; pinVal=''; renderPin();
+  USER=null; CARTERAS={}; PROMESAS={}; CURRENT=null;
+  // Reset PIN
+  pinVal='';
+  for(var i=0;i<5;i++){
+    var el=document.getElementById('p'+i);
+    if(el){el.textContent='';el.className='pin-dot';}
+  }
   document.getElementById('login-err').textContent='';
   document.getElementById('main-header').style.display='none';
   document.getElementById('home-zone').style.display='none';
